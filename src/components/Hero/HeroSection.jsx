@@ -610,10 +610,11 @@ const HeroSection = () => {
                 <video
                   ref={videoRef}
                   className="w-full h-full object-cover"
-                  poster="/api/placeholder/800/450"
+                  poster="https://via.placeholder.com/800x450/1A1A2E/FFFFFF?text=Your+Video+Here"
                   onClick={toggleVideo}
                 >
-                  <source src="your-video-url.mp4" type="video/mp4" />
+                  {/* Using a placeholder MP4 file */}
+                  <source src="https://assets.mixkit.co/videos/preview/mixkit-software-developer-working-on-code-screen-1728-large.mp4" type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               </div>
