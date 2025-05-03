@@ -243,9 +243,9 @@ const StarField = ({ count = 100 }) => {
     const opacity = Math.random() * 0.7 + 0.3;
 
     stars.push(
-      <motion.div
-        key={i}
-        style={{
+      React.createElement(motion.div, {
+        key: i,
+        style: {
           position: 'absolute',
           width: size,
           height: size,
@@ -254,21 +254,23 @@ const StarField = ({ count = 100 }) => {
           left: `${x}%`,
           top: `${y}%`,
           opacity,
-        }}
-        animate={{
+        },
+        animate: {
           opacity: [opacity, opacity * 1.5, opacity],
           scale: [1, 1.2, 1],
-        }}
-        transition={{
+        },
+        transition: {
           duration,
           repeat: Infinity,
           delay,
-        }}
-      />
+        }
+      })
     );
   }
 
-  return <Box sx={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>{stars}</Box>;
+  return React.createElement(Box, { 
+    sx: { position: 'absolute', width: '100%', height: '100%', zIndex: 0 } 
+  }, stars);
 };
 
 // Space background with WebGL nebula effect
@@ -485,11 +487,16 @@ const SpaceBg = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  return (
-    <Box sx={{ position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 1 }}>
-      <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} />
-      <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.4), transparent)' }} />
-    </Box>
+  return React.createElement(
+    Box, 
+    { sx: { position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 1 } },
+    React.createElement('canvas', { 
+      ref: canvasRef, 
+      style: { position: 'absolute', inset: 0, width: '100%', height: '100%' } 
+    }),
+    React.createElement(Box, { 
+      sx: { position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.4), transparent)' } 
+    })
   );
 };
 
@@ -530,9 +537,9 @@ const Rocket3D = () => {
       const delay = Math.random() * 0.2;
       
       particles.push(
-        <motion.div
-          key={i}
-          style={{
+        React.createElement(motion.div, {
+          key: i,
+          style: {
             position: 'absolute',
             width: size,
             height: size,
@@ -545,203 +552,209 @@ const Rocket3D = () => {
             marginLeft: xOffset,
             bottom: -10,
             zIndex: -1
-          }}
-          animate={{
+          },
+          animate: {
             y: [0, 100 + Math.random() * 50],
             opacity: [0.8, 0]
-          }}
-          transition={{
+          },
+          transition: {
             duration,
             repeat: Infinity,
             delay
-          }}
-        />
+          }
+        })
       );
     }
     
-    return <>{particles}</>;
+    return React.createElement(React.Fragment, null, particles);
   };
 
-  return (
-    <motion.div
-      style={{ 
-        position: 'absolute',
-        y: rocketY,
-        rotate: rotation,
-        zIndex: 5,
-        width: '100%',
-        height: '100%',
-      }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-      whileHover={{ scale: 1.05 }}
-      initial={{ opacity: 0, y: 100 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 1, delay: 0.5 }}
-    >
-      <Box sx={{ position: "relative", width: "100%", height: "100%" }}>
-        {/* 3D Rocket with CSS transforms for depth */}
-        <Box 
-          sx={{ 
-            position: "absolute", 
-            top: "25%", 
-            left: "25%", 
-            width: "50%", 
-            height: "50%",
-            transform: "preserve-3d",
-            perspective: "1000px"
-          }}
-        >
-          {/* Rocket glow effect */}
-          <Box 
-            sx={{ 
-              position: "absolute", 
-              width: "100%", 
-              height: "100%", 
-              borderRadius: "50%",
-              background: "radial-gradient(ellipse at center, rgba(138, 79, 255, 0.4) 0%, transparent 70%)",
-              filter: "blur(20px)",
-              transform: "translateZ(-20px) scale(1.5)"
-            }} 
-          />
-          
-          {/* Rocket body */}
-          <Box
-            sx={{
-              position: "absolute",
-              width: "75%",
-              height: "75%",
-              left: "12.5%",
-              background: "linear-gradient(135deg, #9b87f5 0%, #A375FF 100%)",
-              borderRadius: "50% 50% 15% 15% / 60% 60% 15% 15%",
-              boxShadow: "0 0 30px rgba(138, 79, 255, 0.5), inset 0 10px 20px rgba(255, 255, 255, 0.4), inset 0 -5px 15px rgba(0, 0, 0, 0.3)",
-              transform: "translateZ(10px)"
-            }}
-          />
-          
-          {/* Rocket tip with 3D effect */}
-          <Box
-            sx={{
-              position: "absolute",
-              width: "50%",
-              height: "33%",
-              left: "25%",
-              top: "-10%",
-              background: "linear-gradient(135deg, #7340D1 0%, #8A4FFF 100%)",
-              borderRadius: "50% 50% 0 0 / 80% 80% 0 0",
-              boxShadow: "inset 0 5px 10px rgba(255, 255, 255, 0.4), inset 0 -2px 5px rgba(0, 0, 0, 0.2)",
-              transform: "translateZ(15px)"
-            }}
-          />
-          
-          {/* Window with 3D glass effect */}
-          <Box
-            sx={{
-              position: "absolute",
-              width: "33%",
-              height: "20%",
-              left: "33.3%",
-              top: "25%",
-              background: "radial-gradient(ellipse at center, rgba(210, 235, 255, 0.9) 0%, rgba(120, 190, 255, 0.9) 100%)",
-              borderRadius: "50%",
-              boxShadow: "inset 0 0 8px rgba(255, 255, 255, 0.8), 0 0 15px rgba(173, 216, 230, 0.6)",
-              transform: "translateZ(20px)"
-            }}
-          >
-            {/* Window reflection */}
-            <Box
-              sx={{
-                position: "absolute",
-                width: "50%",
-                height: "33%",
-                top: "20%",
-                left: "25%",
-                background: "rgba(255, 255, 255, 0.6)",
-                borderRadius: "50%",
-                transform: "rotate(-30deg)"
-              }}
-            />
-          </Box>
-          
-          {/* Left fin with 3D effect */}
-          <Box
-            sx={{
-              position: "absolute",
-              width: "20%",
-              height: "33%",
-              left: "-5%",
-              bottom: "20%",
-              background: "linear-gradient(135deg, #6030B1 0%, #7340D1 100%)",
-              borderRadius: "50% 50% 0 50% / 50% 50% 0 50%",
-              boxShadow: "inset 0 5px 10px rgba(255, 255, 255, 0.2), inset 0 -2px 5px rgba(0, 0, 0, 0.3), -5px 5px 15px rgba(0, 0, 0, 0.2)",
-              transform: "translateZ(5px) rotate(-20deg)"
-            }}
-          />
-          
-          {/* Right fin with 3D effect */}
-          <Box
-            sx={{
-              position: "absolute",
-              width: "20%",
-              height: "33%",
-              right: "-5%",
-              bottom: "20%",
-              background: "linear-gradient(135deg, #6030B1 0%, #7340D1 100%)",
-              borderRadius: "50% 50% 50% 0 / 50% 50% 50% 0",
-              boxShadow: "inset 0 5px 10px rgba(255, 255, 255, 0.2), inset 0 -2px 5px rgba(0, 0, 0, 0.3), 5px 5px 15px rgba(0, 0, 0, 0.2)",
-              transform: "translateZ(5px) rotate(20deg)"
-            }}
-          />
-          
-          {/* Bottom exhaust */}
-          <Box
-            sx={{
-              position: "absolute",
-              width: "40%",
-              height: "16%",
-              left: "30%",
-              bottom: "0",
-              background: "linear-gradient(to bottom, #444, #222)",
-              borderRadius: "0 0 40% 40% / 0 0 100% 100%",
-              boxShadow: "inset 0 -5px 10px rgba(255, 165, 0, 0.5)",
-              transform: "translateZ(5px)"
-            }}
-          />
-
-          {/* Metal details - rivets around the body */}
-          {[...Array(8)].map((_, i) => (
-            <Box
-              key={i}
-              sx={{
-                position: "absolute",
-                width: "4px",
-                height: "4px",
-                left: "50%",
-                top: `${30 + i * 6}%`,
-                background: "#d0d0d0",
-                borderRadius: "50%",
-                transform: `translateX(-50%) translateZ(15px) rotate(${i * 45}deg)`,
-                boxShadow: "0 0 2px rgba(255, 255, 255, 0.8)"
-              }}
-            />
-          ))}
-          
-          {/* Holographic details - slight shimmer effect */}
-          <Box
-            sx={{
-              position: "absolute",
-              width: "100%",
-              height: "100%",
-              opacity: 0.3,
-              background: "linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.1), transparent)",
-              animation: "shimmer 3s infinite linear",
-              transform: "translateZ(12px)"
-            }}
-          />
-        </Box>
-        
-        {/* Rocket exhaust animation */}
-        <Box sx={{ 
+  return React.createElement(motion.div, {
+    style: { 
+      position: 'absolute',
+      y: rocketY,
+      rotate: rotation,
+      zIndex: 5,
+      width: '100%',
+      height: '100%',
+    },
+    onHoverStart: () => setIsHovered(true),
+    onHoverEnd: () => setIsHovered(false),
+    whileHover: { scale: 1.05 },
+    initial: { opacity: 0, y: 100 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 1, delay: 0.5 }
+  }, React.createElement(
+    Box, 
+    { sx: { position: "relative", width: "100%", height: "100%" } },
+    
+    // 3D Rocket with CSS transforms for depth
+    React.createElement(
+      Box, 
+      { 
+        sx: { 
+          position: "absolute", 
+          top: "25%", 
+          left: "25%", 
+          width: "50%", 
+          height: "50%",
+          transform: "preserve-3d",
+          perspective: "1000px"
+        } 
+      },
+      // Rocket glow effect
+      React.createElement(Box, { 
+        sx: { 
+          position: "absolute", 
+          width: "100%", 
+          height: "100%", 
+          borderRadius: "50%",
+          background: "radial-gradient(ellipse at center, rgba(138, 79, 255, 0.4) 0%, transparent 70%)",
+          filter: "blur(20px)",
+          transform: "translateZ(-20px) scale(1.5)"
+        } 
+      }),
+      
+      // Rocket body
+      React.createElement(Box, {
+        sx: {
+          position: "absolute",
+          width: "75%",
+          height: "75%",
+          left: "12.5%",
+          background: "linear-gradient(135deg, #9b87f5 0%, #A375FF 100%)",
+          borderRadius: "50% 50% 15% 15% / 60% 60% 15% 15%",
+          boxShadow: "0 0 30px rgba(138, 79, 255, 0.5), inset 0 10px 20px rgba(255, 255, 255, 0.4), inset 0 -5px 15px rgba(0, 0, 0, 0.3)",
+          transform: "translateZ(10px)"
+        }
+      }),
+      
+      // Rocket tip with 3D effect
+      React.createElement(Box, {
+        sx: {
+          position: "absolute",
+          width: "50%",
+          height: "33%",
+          left: "25%",
+          top: "-10%",
+          background: "linear-gradient(135deg, #7340D1 0%, #8A4FFF 100%)",
+          borderRadius: "50% 50% 0 0 / 80% 80% 0 0",
+          boxShadow: "inset 0 5px 10px rgba(255, 255, 255, 0.4), inset 0 -2px 5px rgba(0, 0, 0, 0.2)",
+          transform: "translateZ(15px)"
+        }
+      }),
+      
+      // Window with 3D glass effect
+      React.createElement(Box, {
+        sx: {
+          position: "absolute",
+          width: "33%",
+          height: "20%",
+          left: "33.3%",
+          top: "25%",
+          background: "radial-gradient(ellipse at center, rgba(210, 235, 255, 0.9) 0%, rgba(120, 190, 255, 0.9) 100%)",
+          borderRadius: "50%",
+          boxShadow: "inset 0 0 8px rgba(255, 255, 255, 0.8), 0 0 15px rgba(173, 216, 230, 0.6)",
+          transform: "translateZ(20px)"
+        }
+      },
+      // Window reflection
+      React.createElement(Box, {
+        sx: {
+          position: "absolute",
+          width: "50%",
+          height: "33%",
+          top: "20%",
+          left: "25%",
+          background: "rgba(255, 255, 255, 0.6)",
+          borderRadius: "50%",
+          transform: "rotate(-30deg)"
+        }
+      })
+      ),
+      
+      // Left fin with 3D effect
+      React.createElement(Box, {
+        sx: {
+          position: "absolute",
+          width: "20%",
+          height: "33%",
+          left: "-5%",
+          bottom: "20%",
+          background: "linear-gradient(135deg, #6030B1 0%, #7340D1 100%)",
+          borderRadius: "50% 50% 0 50% / 50% 50% 0 50%",
+          boxShadow: "inset 0 5px 10px rgba(255, 255, 255, 0.2), inset 0 -2px 5px rgba(0, 0, 0, 0.3), -5px 5px 15px rgba(0, 0, 0, 0.2)",
+          transform: "translateZ(5px) rotate(-20deg)"
+        }
+      }),
+      
+      // Right fin with 3D effect
+      React.createElement(Box, {
+        sx: {
+          position: "absolute",
+          width: "20%",
+          height: "33%",
+          right: "-5%",
+          bottom: "20%",
+          background: "linear-gradient(135deg, #6030B1 0%, #7340D1 100%)",
+          borderRadius: "50% 50% 50% 0 / 50% 50% 50% 0",
+          boxShadow: "inset 0 5px 10px rgba(255, 255, 255, 0.2), inset 0 -2px 5px rgba(0, 0, 0, 0.3), 5px 5px 15px rgba(0, 0, 0, 0.2)",
+          transform: "translateZ(5px) rotate(20deg)"
+        }
+      }),
+      
+      // Bottom exhaust
+      React.createElement(Box, {
+        sx: {
+          position: "absolute",
+          width: "40%",
+          height: "16%",
+          left: "30%",
+          bottom: "0",
+          background: "linear-gradient(to bottom, #444, #222)",
+          borderRadius: "0 0 40% 40% / 0 0 100% 100%",
+          boxShadow: "inset 0 -5px 10px rgba(255, 165, 0, 0.5)",
+          transform: "translateZ(5px)"
+        }
+      }),
+      
+      // Metal details - rivets around the body
+      [...Array(8)].map((_, i) =>
+        React.createElement(Box, {
+          key: i,
+          sx: {
+            position: "absolute",
+            width: "4px",
+            height: "4px",
+            left: "50%",
+            top: `${30 + i * 6}%`,
+            background: "#d0d0d0",
+            borderRadius: "50%",
+            transform: `translateX(-50%) translateZ(15px) rotate(${i * 45}deg)`,
+            boxShadow: "0 0 2px rgba(255, 255, 255, 0.8)"
+          }
+        })
+      ),
+      
+      // Holographic details
+      React.createElement(Box, {
+        sx: {
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          opacity: 0.3,
+          background: "linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.1), transparent)",
+          animation: "shimmer 3s infinite linear",
+          transform: "translateZ(12px)"
+        }
+      })
+    ),
+    
+    // Rocket exhaust animation
+    React.createElement(
+      Box, 
+      { 
+        sx: { 
           position: "absolute", 
           bottom: "25%", 
           left: "50%", 
@@ -751,19 +764,19 @@ const Rocket3D = () => {
           overflow: "visible", 
           display: "flex", 
           justifyContent: "center" 
-        }}>
-          <RocketExhaust active={isHovered || scrollY > 50} />
-        </Box>
-      </Box>
-
-      <style>{`
-        @keyframes shimmer {
-          0% { background-position: -100% 0; }
-          100% { background-position: 200% 0; }
         }
-      `}</style>
-    </motion.div>
-  );
+      },
+      React.createElement(RocketExhaust, { active: isHovered || scrollY > 50 })
+    ),
+    
+    // Style tag for keyframes
+    React.createElement('style', null, `
+      @keyframes shimmer {
+        0% { background-position: -100% 0; }
+        100% { background-position: 200% 0; }
+      }
+    `)
+  ));
 };
 
 // Main HeroSection component
@@ -779,83 +792,196 @@ const Hero = () => {
 
   // Inline GradientText component functionality
   const GradientText = ({ text, underlined }) => {
-    return (
-      <Box component="span" sx={{ position: "relative" }}>
-        <Box
-          component="span"
-          sx={{
+    return React.createElement(
+      Box, 
+      { component: "span", sx: { position: "relative" } },
+      React.createElement(
+        Box,
+        {
+          component: "span",
+          sx: {
             backgroundImage: "linear-gradient(to right, #9b87f5, #A375FF)",
             backgroundClip: "text",
             WebkitBackgroundClip: "text",
             color: "transparent"
-          }}
-        >
-          {text}
-        </Box>
-        {underlined && (
-          <Box
-            component="span"
-            sx={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              width: "100%",
-              height: "4px",
-              backgroundImage: "linear-gradient(to right, #9b87f5, #A375FF)",
-              borderRadius: "4px"
-            }}
-          />
-        )}
-      </Box>
+          }
+        },
+        text
+      ),
+      underlined && React.createElement(
+        Box,
+        {
+          component: "span",
+          sx: {
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            width: "100%",
+            height: "4px",
+            backgroundImage: "linear-gradient(to right, #9b87f5, #A375FF)",
+            borderRadius: "4px"
+          }
+        }
+      )
     );
   };
 
-  return (
-    <HeroContainer>
-      {/* 3D Space Background */}
-      <SpaceBg />
+  return React.createElement(
+    HeroContainer,
+    null,
+    // 3D Space Background
+    React.createElement(SpaceBg),
+    React.createElement(Gradient),
+    React.createElement(
+      ContentContainer,
+      null,
+      React.createElement(
+        Grid,
+        null,
+        // Content Section
+        React.createElement(
+          ContentSection,
+          null,
+          React.createElement(
+            motion.div,
+            {
+              initial: { opacity: 0, y: 30 },
+              animate: { opacity: 1, y: 0 },
+              transition: { duration: 0.7 },
+              style: { display: "flex", flexDirection: "column", gap: "24px" }
+            },
+            React.createElement(
+              Heading,
+              { variant: "h1" },
+              "Finally your Startup can ",
+              React.createElement(GradientText, { text: "blast off!", underlined: true })
+            ),
+            React.createElement(
+              Description,
+              null,
+              "Stand out, get Traction, hit PMF, go viral, make Money, secure funding and ",
+              React.createElement(
+                HighlightText,
+                { component: "span" },
+                "scale scale scale."
+              )
+            ),
+            React.createElement(
+              Typography,
+              { variant: "h5", sx: { fontWeight: 600, color: "white" } },
+              "The World needs to feel your impact.",
+              React.createElement("br"),
+              "Get the Growth you have always desired."
+            )
+          ),
+          React.createElement(
+            motion.div,
+            {
+              initial: { opacity: 0, y: 20 },
+              animate: { opacity: 1, y: 0 },
+              transition: { delay: 0.4, duration: 0.7 }
+            },
+            React.createElement(
+              "div",
+              null,
+              React.createElement(
+                StyledButton,
+                {
+                  onClick: toggleVideo,
+                  component: motion.button,
+                  whileHover: { scale: 1.05 },
+                  whileTap: { scale: 0.95 }
+                },
+                "Watch Demo Video ",
+                React.createElement(Play, { size: 20 })
+              )
+            )
+          )
+        ),
+        // Visual Section with Rocket
+        React.createElement(
+          Box,
+          { sx: { position: "relative", height: "100%", minHeight: "400px" } },
+          React.createElement(Rocket3D),
+          showYouTubeVideo ? React.createElement(
+            VideoContainer,
+            null,
+            React.createElement(
+              VideoAspectRatio,
+              null,
+              React.createElement(
+                VideoIframe,
+                {
+                  src: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1",
+                  title: "YouTube video",
+                  allow: "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
+                  allowFullScreen: true
+                }
+              )
+            )
+          ) : React.createElement(
+            VideoContainer,
+            { onClick: toggleVideo },
+            React.createElement(
+              VideoAspectRatio,
+              null,
+              React.createElement(VideoThumbnail, {
+                sx: {
+                  backgroundImage: "url(https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg)"
+                }
+              }),
+              React.createElement(
+                VideoOverlay,
+                null,
+                React.createElement(
+                  PlayButton,
+                  {
+                    whileHover: { scale: 1.1 },
+                    whileTap: { scale: 0.9 }
+                  },
+                  React.createElement(Play, { size: 36, color: "white" })
+                )
+              ),
+              // Corner decorative elements
+              React.createElement(CornerElement, { corner: "topLeft" }),
+              React.createElement(CornerElement, { corner: "topRight" }),
+              React.createElement(CornerElement, { corner: "bottomLeft" }),
+              React.createElement(CornerElement, { corner: "bottomRight" })
+            ),
+            React.createElement(GlowEffect)
+          )
+        )
+      ),
+      // Scroll indicator
+      React.createElement(
+        ScrollIndicator,
+        {
+          initial: { opacity: 0 },
+          animate: { opacity: 1 },
+          transition: { delay: 1.5, duration: 0.5 }
+        },
+        React.createElement(
+          ScrollContainer,
+          null,
+          React.createElement(ScrollDot, {
+            animate: {
+              y: [0, 16, 0]
+            },
+            transition: {
+              duration: 1.5,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }
+          })
+        ),
+        React.createElement(
+          ScrollText,
+          null,
+          "Scroll"
+        )
+      )
+    )
+  );
+};
 
-      <Gradient />
-
-      <ContentContainer>
-        <Grid>
-          {/* Content Section */}
-          <ContentSection>
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7 }}
-              style={{ display: "flex", flexDirection: "column", gap: "24px" }}
-            >
-              <Heading variant="h1">
-                Finally your Startup can{" "}
-                <GradientText text="blast off!" underlined={true} />
-              </Heading>
-
-              <Description>
-                Stand out, get Traction, hit PMF, go viral, make Money, secure funding and{" "}
-                <HighlightText component="span">
-                  scale scale scale.
-                </HighlightText>
-              </Description>
-
-              <Typography variant="h5" sx={{ fontWeight: 600, color: "white" }}>
-                The World needs to feel your impact.
-                <br />
-                Get the Growth you have always desired.
-              </Typography>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.7 }}
-            >
-              <motion.div>
-                <StyledButton
-                  onClick={toggleVideo}
-                  component={motion.button}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Box sx={{ position: "absolute", inset: 0,
+export default Hero;
