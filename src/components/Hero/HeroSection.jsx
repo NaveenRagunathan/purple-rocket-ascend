@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from "react";
 import { motion, useMotionValue, useTransform, AnimatePresence } from "framer-motion";
 import { PlayCircle } from "lucide-react";
@@ -519,17 +518,12 @@ const SpaceBg = () => {
 // Main HeroSection component
 const HeroSection = () => {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [showYouTubeVideo, setShowYouTubeVideo] = useState(false);
   const videoRef = useRef(null);
 
   const toggleVideo = () => {
-    if (videoRef.current) {
-      if (isVideoPlaying) {
-        videoRef.current.pause();
-      } else {
-        videoRef.current.play();
-      }
-      setIsVideoPlaying(!isVideoPlaying);
-    }
+    setShowYouTubeVideo(true);
+    setIsVideoPlaying(true);
   };
 
   return (
@@ -607,21 +601,27 @@ const HeroSection = () => {
               className="relative z-[2] rounded-2xl overflow-hidden shadow-[0_0_40px_rgba(138,79,255,0.3)] border border-purple-500/20"
             >
               <div className="aspect-w-16 aspect-h-9">
-                <video
-                  ref={videoRef}
-                  className="w-full h-full object-cover"
-                  poster="https://via.placeholder.com/800x450/1A1A2E/FFFFFF?text=Your+Video+Here"
-                  onClick={toggleVideo}
-                >
-                  {/* Using a placeholder MP4 file */}
-                  <source src="https://assets.mixkit.co/videos/preview/mixkit-software-developer-working-on-code-screen-1728-large.mp4" type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
+                {showYouTubeVideo ? (
+                  <iframe
+                    className="w-full h-full"
+                    src="https://www.youtube.com/embed/Wleby2uqYDE?si=Fvy6mwT5_zt3CaqH&autoplay=1"
+                    title="YouTube video player"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                ) : (
+                  <div 
+                    className="w-full h-full bg-cover bg-center cursor-pointer"
+                    style={{ backgroundImage: "url('https://img.youtube.com/vi/Wleby2uqYDE/maxresdefault.jpg')" }}
+                    onClick={toggleVideo}
+                  ></div>
+                )}
               </div>
 
               {/* Video Play Overlay */}
               <AnimatePresence>
-                {!isVideoPlaying && (
+                {!showYouTubeVideo && (
                   <motion.div
                     initial={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
