@@ -1,6 +1,6 @@
 
 import React from "react";
-import Hero from "../components/Hero/Hero.js";
+import Hero from "../components/Hero/Hero.jsx";
 
 const Index = () => {
   return React.createElement(
